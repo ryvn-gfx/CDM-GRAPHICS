@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Portfolio</title>
+    <style>
+        /* Clean & Minimalist Basis */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 40px 20px;
+        }
+        header {
+            max-width: 1200px;
+            margin: 0 auto 60px auto;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 500;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+        p {
+            color: #888;
+            font-size: 1rem;
+        }
+
+        /* Borderless Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .portfolio-item {
+            background: #161616;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        .portfolio-item:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Clean Video & Image Wrapper (Zorgt voor 16:9 verhouding) */
+        .media-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+        }
+        .media-container video, 
+        .media-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Tekst onder het project */
+        .project-info {
+            padding: 20px;
+        }
+        .project-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .project-tag {
+            color: #666;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Portfolio</h1>
+        <p>Geselecteerd werk — HD Video & APNG Loops</p>
+    </header>
+
+    <main class="portfolio-grid">
+
+        <!-- PROJECT 1: HD VIDEO LOOP (Clean, zonder speler-knoppen) -->
+        <div class="portfolio-item">
+            <div class="media-container">
+                <video autoplay loop muted playsinline>
+                    <source src="LINK_NAAR_JE_HD_VIDEO_1.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="project-info">
+                <div class="project-title">Project Naam Eén</div>
+                <div class="project-tag">HD MP4 Video</div>
+            </div>
+        </div>
+
+        <!-- PROJECT 2: APNG LOOP (Geladen via directe externe link) -->
+        <div class="portfolio-item">
+            <div class="media-container">
+                <img src="LINK_NAAR_JE_APNG_IMAGE.png" alt="APNG animatie">
+            </div>
+            <div class="project-info">
+                <div class="project-title">Project Naam Twee</div>
+                <div class="project-tag">Natieve APNG Loop</div>
+            </div>
+        </div>
+
+        <!-- PROJECT 3: NOG EEN HD VIDEO -->
+        <div class="portfolio-item">
+            <div class="media-container">
+                <video autoplay loop muted playsinline>
+                    <source src="LINK_NAAR_JE_HD_VIDEO_2.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="project-info">
+                <div class="project-title">Project Naam Drie</div>
+                <div class="project-tag">HD MP4 Video</div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
