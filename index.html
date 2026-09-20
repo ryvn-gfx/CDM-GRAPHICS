@@ -17,9 +17,8 @@
             padding: 40px 20px;
         }
         header {
-            max-width: 1920px;
-            margin: 0 auto 60px auto;
-            text-align: center; /* Optioneel: past beter bij een gecentreerde feed */
+            max-width: 1400px;
+            margin: 0 auto 40px auto;
         }
         h1 {
             font-size: 2rem;
@@ -32,43 +31,45 @@
             font-size: 1rem;
         }
 
-        /* Tumblr-stijl gecentreerde endless scroll */
+        /* Masonry Grid Setup (Tumblr stijl) */
         .portfolio-grid {
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            gap: 60px; /* Iets meer ruimte tussen posts */
-            max-width: 1920px;
+            max-width: 1400px;
             margin: 0 auto;
+            column-count: 2; /* Aantal kolommen voor desktop */
+            column-gap: 24px;
         }
         
         .portfolio-item {
             background: #161616;
             border-radius: 12px;
             overflow: hidden;
-            width: fit-content; 
-            max-width: 100%; /* Voorkomt dat de container breder wordt dan het scherm */
-        }
-
-        .media-container {
-            background: #000;
-            display: flex;
-            justify-content: center;
+            transition: transform 0.3s ease;
+            margin-bottom: 24px; /* Ruimte onder elk item */
+            break-inside: avoid; /* Voorkomt dat een blok over twee kolommen wordt gesplitst */
+            display: inline-block;
+            width: 100%;
         }
         
+        .portfolio-item:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Media containers passen zich aan de verhouding van de bron aan */
+        .media-container {
+            background: #000;
+            display: block;
+        }
+        
+        /* Video's en afbeeldingen behouden hun verhouding (aspect ratio) */
         .media-container video, 
         .media-container img {
             display: block;
-            width: auto;  
-            height: auto; 
-            max-width: 100%; /* Schaal horizontaal mee op kleine schermen */
-            max-height: 85vh; /* Zorgt dat verticale video's (zoals 1000x1300) altijd in je scherm passen */
-            object-fit: contain;
+            width: 100%;
+            height: auto;
         }
 
         .project-info {
             padding: 20px;
-            width: 100%;
         }
         .project-title {
             font-size: 1.1rem;
@@ -81,6 +82,13 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+
+        /* Responsief: 1 kolom op kleinere schermen */
+        @media (max-width: 900px) {
+            .portfolio-grid {
+                column-count: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -92,6 +100,7 @@
 
     <main class="portfolio-grid">
 
+        <!-- Brede video (bijv. 1024x512) -->
         <div class="portfolio-item">
             <div class="media-container">
                 <video autoplay loop muted playsinline>
@@ -100,30 +109,31 @@
             </div>
             <div class="project-info">
                 <div class="project-title">Signature Pringles</div>
-                <div class="project-tag">HD Motion Design</div>
+                <div class="project-tag">1024x512 Video</div>
             </div>
         </div>
 
-        <div class="portfolio-item">
-            <div class="media-container">
-                <!-- Voorbeeld van de 1000x1300 verticale video of APNG -->
-                <img src="jouw-afbeelding.png" alt="APNG animatie">
-            </div>
-            <div class="project-info">
-                <div class="project-title">Project Verticaal</div>
-                <div class="project-tag">Natieve APNG Loop</div>
-            </div>
-        </div>
-
+        <!-- Verticale video -->
         <div class="portfolio-item">
             <div class="media-container">
                 <video autoplay loop muted playsinline>
-                    <source src="jouw-video2.mp4" type="video/mp4">
+                    <source src="lunatica_hd-2_s.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="project-info">
+                <div class="project-title">Lunatica HD</div>
+                <div class="project-tag">Verticale Video</div>
+            </div>
+        </div>
+
+        <!-- APNG placeholder -->
+        <div class="portfolio-item">
+            <div class="media-container">
+                <img src="jouw-afbeelding.png" alt="APNG animatie">
+            </div>
+            <div class="project-info">
                 <div class="project-title">Project Naam Drie</div>
-                <div class="project-tag">HD MP4 Video</div>
+                <div class="project-tag">Natieve APNG Loop</div>
             </div>
         </div>
 
