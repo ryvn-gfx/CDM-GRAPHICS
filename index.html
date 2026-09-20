@@ -19,6 +19,7 @@
         header {
             max-width: 1920px;
             margin: 0 auto 60px auto;
+            text-align: center; /* Optioneel: past beter bij een gecentreerde feed */
         }
         h1 {
             font-size: 2rem;
@@ -31,29 +32,24 @@
             font-size: 1rem;
         }
 
-        /* Flex container centreert items en laat ze hun eigen RAW size behouden */
+        /* Tumblr-stijl gecentreerde endless scroll */
         .portfolio-grid {
             display: flex;
             flex-direction: column;
             align-items: center; 
-            gap: 40px;
+            gap: 60px; /* Iets meer ruimte tussen posts */
             max-width: 1920px;
             margin: 0 auto;
         }
         
-        /* Container neemt exact de breedte van de media aan via fit-content */
         .portfolio-item {
             background: #161616;
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.3s ease;
             width: fit-content; 
-        }
-        .portfolio-item:hover {
-            transform: translateY(-4px);
+            max-width: 100%; /* Voorkomt dat de container breder wordt dan het scherm */
         }
 
-        /* Geen vaste verhoudingen of absolute positionering meer */
         .media-container {
             background: #000;
             display: flex;
@@ -63,9 +59,11 @@
         .media-container video, 
         .media-container img {
             display: block;
-            width: auto;  /* Forceert de originele RAW breedte */
-            height: auto; /* Forceert de originele RAW hoogte */
-            max-width: 100vw; /* Zorgt er enkel voor dat extreem grote bestanden niet buiten het scherm vallen op mobiel */
+            width: auto;  
+            height: auto; 
+            max-width: 100%; /* Schaal horizontaal mee op kleine schermen */
+            max-height: 85vh; /* Zorgt dat verticale video's (zoals 1000x1300) altijd in je scherm passen */
+            object-fit: contain;
         }
 
         .project-info {
@@ -108,10 +106,11 @@
 
         <div class="portfolio-item">
             <div class="media-container">
+                <!-- Voorbeeld van de 1000x1300 verticale video of APNG -->
                 <img src="jouw-afbeelding.png" alt="APNG animatie">
             </div>
             <div class="project-info">
-                <div class="project-title">Project Naam Twee</div>
+                <div class="project-title">Project Verticaal</div>
                 <div class="project-tag">Natieve APNG Loop</div>
             </div>
         </div>
