@@ -51,11 +51,11 @@
             transform: translateY(-4px);
         }
 
-        /* Clean Video & Image Wrapper (Zorgt voor 16:9 verhouding) */
+        /* Clean Video & Image Wrapper (16:9 Aspect Ratio container) */
         .media-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 56.25%; /* 16:9 verhouding */
             background: #000;
         }
         .media-container video, 
@@ -65,7 +65,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Zorgt ervoor dat video/APNG zijn originele grootte en verhouding behoudt */
         }
 
         /* Tekst onder het project */
@@ -94,7 +94,7 @@
 
     <main class="portfolio-grid">
 
-        <!-- PROJECT 1: HD VIDEO LOOP (SignaturePringles2) -->
+        <!-- PROJECT 1: HD VIDEO LOOP (Jouw geüploade video) -->
         <div class="portfolio-item">
             <div class="media-container">
                 <video autoplay loop muted playsinline>
@@ -107,10 +107,10 @@
             </div>
         </div>
 
-        <!-- PROJECT 2: APNG LOOP (Geladen via directe externe link) -->
+        <!-- PROJECT 2: APNG LOOP PLACEHOLDER (Vervang 'jouw-afbeelding.png' door je eigen bestandsnaam) -->
         <div class="portfolio-item">
             <div class="media-container">
-                <img src="LINK_NAAR_JE_APNG_IMAGE.png" alt="APNG animatie">
+                <img src="jouw-afbeelding.png" alt="APNG animatie">
             </div>
             <div class="project-info">
                 <div class="project-title">Project Naam Twee</div>
@@ -118,11 +118,11 @@
             </div>
         </div>
 
-        <!-- PROJECT 3: NOG EEN HD VIDEO -->
+        <!-- PROJECT 3: TWEEDE VIDEO PLACEHOLDER (Vervang 'jouw-video2.mp4' door je eigen bestandsnaam) -->
         <div class="portfolio-item">
             <div class="media-container">
                 <video autoplay loop muted playsinline>
-                    <source src="LINK_NAAR_JE_HD_VIDEO_2.mp4" type="video/mp4">
+                    <source src="jouw-video2.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="project-info">
