@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mijn Portfolio</title>
     <style>
-        /* Clean & Minimalist Basis */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -32,45 +31,46 @@
             font-size: 1rem;
         }
 
-        /* 1-Kolom Portfolio Grid voor Full Size */
+        /* Flex container centreert items en laat ze hun eigen RAW size behouden */
         .portfolio-grid {
-            display: grid;
-            grid-template-columns: 1fr;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
             gap: 40px;
             max-width: 1920px;
             margin: 0 auto;
         }
+        
+        /* Container neemt exact de breedte van de media aan via fit-content */
         .portfolio-item {
             background: #161616;
             border-radius: 12px;
             overflow: hidden;
-            position: relative;
             transition: transform 0.3s ease;
+            width: fit-content; 
         }
         .portfolio-item:hover {
             transform: translateY(-4px);
         }
 
-        /* Clean Video & Image Wrapper (16:9 Aspect Ratio container) */
+        /* Geen vaste verhoudingen of absolute positionering meer */
         .media-container {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 verhouding */
             background: #000;
+            display: flex;
+            justify-content: center;
         }
+        
         .media-container video, 
         .media-container img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+            display: block;
+            width: auto;  /* Forceert de originele RAW breedte */
+            height: auto; /* Forceert de originele RAW hoogte */
+            max-width: 100vw; /* Zorgt er enkel voor dat extreem grote bestanden niet buiten het scherm vallen op mobiel */
         }
 
-        /* Tekst onder het project */
         .project-info {
             padding: 20px;
+            width: 100%;
         }
         .project-title {
             font-size: 1.1rem;
@@ -94,7 +94,6 @@
 
     <main class="portfolio-grid">
 
-        <!-- PROJECT 1: HD VIDEO LOOP (Jouw geüploade video) -->
         <div class="portfolio-item">
             <div class="media-container">
                 <video autoplay loop muted playsinline>
@@ -107,7 +106,6 @@
             </div>
         </div>
 
-        <!-- PROJECT 2: APNG LOOP PLACEHOLDER (Vervang 'jouw-afbeelding.png' door je eigen bestandsnaam) -->
         <div class="portfolio-item">
             <div class="media-container">
                 <img src="jouw-afbeelding.png" alt="APNG animatie">
@@ -118,7 +116,6 @@
             </div>
         </div>
 
-        <!-- PROJECT 3: TWEEDE VIDEO PLACEHOLDER (Vervang 'jouw-video2.mp4' door je eigen bestandsnaam) -->
         <div class="portfolio-item">
             <div class="media-container">
                 <video autoplay loop muted playsinline>
