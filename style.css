@@ -12,7 +12,7 @@ body {
 }
 
 header {
-    max-width: 2100px;
+    max-width: 1400px;
     margin: 0 auto 40px auto;
 }
 
@@ -51,9 +51,9 @@ p {
     color: #ffffff;
 }
 
-/* Masonry layout via CSS columns */
+/* Masonry layout */
 .portfolio-grid {
-    max-width: 2100px;
+    max-width: 1400px;
     margin: 0 auto;
     column-count: 2;
     column-gap: 24px;
@@ -78,7 +78,7 @@ p {
 .portfolio-item video,
 .portfolio-item img {
     display: block;
-    width: 1024px;
+    width: 100%;
     height: auto;
     border-radius: 12px;
 }
@@ -105,7 +105,7 @@ p {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-@media (max-width: 2100px) {
+@media (max-width: 900px) {
     .portfolio-grid {
         column-count: 1;
     }
