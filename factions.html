@@ -61,6 +61,7 @@
         }
         
         .portfolio-item {
+            position: relative;
             border-radius: 12px;
             overflow: hidden;
             transition: transform 0.3s ease;
@@ -80,6 +81,28 @@
             width: 100%;
             height: auto;
             border-radius: 12px;
+        }
+
+        .sound-toggle-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            z-index: 10;
+        }
+
+        .sound-toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         @media (max-width: 900px) {
@@ -111,9 +134,23 @@
             <video autoplay loop muted playsinline>
                 <source src="files/lunatica_hd-2_s.mp4" type="video/mp4">
             </video>
+            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
         </div>
 
     </main>
 
+    <script>
+        function toggleSound(button) {
+            const video = button.previousElementSibling;
+            
+            if (video.muted) {
+                video.muted = false;
+                button.textContent = "Mute Sound";
+            } else {
+                video.muted = true;
+                button.textContent = "Enable Sound";
+            }
+        }
+    </script>
 </body>
 </html>
