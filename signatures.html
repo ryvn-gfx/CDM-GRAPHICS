@@ -83,26 +83,26 @@
             border-radius: 12px;
         }
 
-        /* Minimalistische overlay styling */
-        .sound-hint {
+        .sound-toggle-btn {
             position: absolute;
             bottom: 12px;
             right: 12px;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.75);
             color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             font-size: 0.75rem;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            padding: 4px 8px;
-            border-radius: 4px;
-            pointer-events: none;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
             backdrop-filter: blur(4px);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            z-index: 10;
         }
 
-        .portfolio-item:hover .sound-hint {
-            opacity: 0;
+        .sound-toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         @media (max-width: 900px) {
@@ -134,21 +134,21 @@
             <video autoplay loop muted playsinline>
                 <source src="files/SignaturePringles2.mp4" type="video/mp4">
             </video>
-            <div class="sound-hint">Hover for sound</div>
+            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
         </div>
         
         <div class="portfolio-item">
             <video autoplay loop muted playsinline>
                 <source src="files/Jinx_transrender.mp4" type="video/mp4">
             </video>
-            <div class="sound-hint">Hover for sound</div>
+            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
         </div>
         
         <div class="portfolio-item">
             <video autoplay loop muted playsinline>
                 <source src="files/minty_minxy.mp4" type="video/mp4">
             </video>
-            <div class="sound-hint">Hover for sound</div>
+            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
         </div>
 
         <div class="portfolio-item">
@@ -158,33 +158,17 @@
     </main>
 
     <script>
-        const videos = document.querySelectorAll('.portfolio-item video');
-        
-        // Controleer of de sessie al ontgrendeld is
-        if (sessionStorage.getItem('audioUnlocked') === 'true') {
-            videos.forEach(video => {
+        function toggleSound(button) {
+            const video = button.previousElementSibling;
+            
+            if (video.muted) {
                 video.muted = false;
+                button.textContent = "Mute Sound";
+            } else {
                 video.muted = true;
-            });
+                button.textContent = "Enable Sound";
+            }
         }
-
-        // Ontgrendel audio en sla op in de sessie bij de eerste klik
-        document.body.addEventListener('click', () => {
-            sessionStorage.setItem('audioUnlocked', 'true');
-            videos.forEach(video => {
-                video.muted = false;
-                video.muted = true;
-            });
-        }, { once: true });
-
-        videos.forEach(video => {
-            video.addEventListener('mouseenter', () => {
-                video.muted = false;
-            });
-            video.addEventListener('mouseleave', () => {
-                video.muted = true;
-            });
-        });
     </script>
 </body>
 </html>
