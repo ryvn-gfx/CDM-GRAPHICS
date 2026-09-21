@@ -253,5 +253,16 @@
 
     </main>
 
+<script>
+        const videos = document.querySelectorAll('.portfolio-item video');
+        videos.forEach(video => {
+            video.addEventListener('mouseenter', () => {
+                video.muted = false;
+            });
+            video.addEventListener('mouseleave', () => {
+                video.muted = true;
+            });
+        });
+    </script>
 </body>
 </html>
