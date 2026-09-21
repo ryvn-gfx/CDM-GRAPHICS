@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTFOLIO CDM - Factions</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 40px 20px;
+        }
+        header {
+            max-width: 1400px;
+            margin: 0 auto 40px auto;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 500;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        /* Navigatie Menu */
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+        }
+
+        /* Masonry Grid Setup */
+        .portfolio-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            column-count: 2;
+            column-gap: 24px;
+        }
+        
+        .portfolio-item {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            margin-bottom: 24px;
+            break-inside: avoid;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Video's en afbeeldingen vullen het blok en behouden hun eigen aspect ratio */
+        .portfolio-item video, 
+        .portfolio-item img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Responsief: 1 kolom op kleinere schermen */
+        @media (max-width: 900px) {
+            .portfolio-grid {
+                column-count: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PORTFOLIO CDM</h1>
+        
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Featured</a></li>
+                <li><a href="signatures.html">Signatures</a></li>
+                <li><a href="factions.html" class="active">Factions</a></li>
+                <li><a href="auction.html">Auction</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="portfolio-grid">
+
+        <div class="portfolio-item">
+            <video autoplay loop muted playsinline>
+                <source src="lunatica_hd-2_s.mp4" type="video/mp4">
+            </video>
+        </div>
+
+    </main>
+
+</body>
+</html>
