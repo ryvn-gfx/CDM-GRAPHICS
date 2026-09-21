@@ -28,14 +28,12 @@
             text-transform: uppercase;
         }
         
-        /* Subtitel styling */
         p {
             color: #888;
             font-size: 1rem;
             margin-bottom: 24px;
         }
 
-        /* Navigatie Menu */
         .nav-links {
             display: flex;
             gap: 24px;
@@ -55,7 +53,6 @@
             color: #ffffff;
         }
 
-        /* Masonry Grid Setup */
         .portfolio-grid {
             max-width: 1400px;
             margin: 0 auto;
@@ -77,15 +74,14 @@
             transform: translateY(-4px);
         }
 
-        /* Video's en afbeeldingen vullen het blok en behouden hun eigen aspect ratio */
         .portfolio-item video, 
         .portfolio-item img {
             display: block;
             width: 100%;
             height: auto;
+            border-radius: 12px;
         }
 
-        /* Responsief: 1 kolom op kleinere schermen */
         @media (max-width: 900px) {
             .portfolio-grid {
                 column-count: 1;
@@ -113,7 +109,7 @@
 
         <div class="portfolio-item">
             <video autoplay loop muted playsinline>
-                <source src="lunatica_hd-2_s.mp4" type="video/mp4">
+                <source src="files/lunatica_hd-2_s.mp4" type="video/mp4">
             </video>
         </div>
 
