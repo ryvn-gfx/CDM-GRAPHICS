@@ -31,56 +31,35 @@
             font-size: 1rem;
         }
 
-        /* Masonry Grid Setup (Tumblr stijl) */
+        /* Masonry Grid Setup */
         .portfolio-grid {
             max-width: 1400px;
             margin: 0 auto;
-            column-count: 2; /* Aantal kolommen voor desktop */
+            column-count: 2;
             column-gap: 24px;
         }
         
         .portfolio-item {
-            background: #161616;
             border-radius: 12px;
             overflow: hidden;
             transition: transform 0.3s ease;
-            margin-bottom: 24px; /* Ruimte onder elk item */
-            break-inside: avoid; /* Voorkomt dat een blok over twee kolommen wordt gesplitst */
+            margin-bottom: 24px;
+            break-inside: avoid;
             display: inline-block;
             width: 100%;
+            /* Zwarte achtergrond verwijderd omdat er geen tekst meer is */
         }
         
         .portfolio-item:hover {
             transform: translateY(-4px);
         }
 
-        /* Media containers passen zich aan de verhouding van de bron aan */
-        .media-container {
-            background: #000;
-            display: block;
-        }
-        
-        /* Video's en afbeeldingen behouden hun verhouding (aspect ratio) */
-        .media-container video, 
-        .media-container img {
+        /* Video's en afbeeldingen vullen het blok en behouden hun eigen aspect ratio */
+        .portfolio-item video, 
+        .portfolio-item img {
             display: block;
             width: 100%;
             height: auto;
-        }
-
-        .project-info {
-            padding: 20px;
-        }
-        .project-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-        .project-tag {
-            color: #666;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         /* Responsief: 1 kolom op kleinere schermen */
@@ -101,73 +80,37 @@
     <main class="portfolio-grid">
 
         <div class="portfolio-item">
-            <div class="media-container">
-                <video autoplay loop muted playsinline>
-                    <source src="SignaturePringles2.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="project-info">
-                <div class="project-title">Signature Pringles</div>
-                <div class="project-tag">1024x512 Video</div>
-            </div>
+            <video autoplay loop muted playsinline>
+                <source src="SignaturePringles2.mp4" type="video/mp4">
+            </video>
         </div>
 
         <div class="portfolio-item">
-            <div class="media-container">
-                <video autoplay loop muted playsinline>
-                    <source src="lunatica_hd-2_s.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="project-info">
-                <div class="project-title">Lunatica HD</div>
-                <div class="project-tag">Verticale Video</div>
-            </div>
+            <video autoplay loop muted playsinline>
+                <source src="lunatica_hd-2_s.mp4" type="video/mp4">
+            </video>
         </div>
         
         <div class="portfolio-item">
-            <div class="media-container">
-                <video autoplay loop muted playsinline>
-                    <source src="Jinx_transrender.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="project-info">
-                <div class="project-title">Jinx Transrender</div>
-                <div class="project-tag">HD Video</div>
-            </div>
+            <video autoplay loop muted playsinline>
+                <source src="Jinx_transrender.mp4" type="video/mp4">
+            </video>
         </div>
         
         <div class="portfolio-item">
-            <div class="media-container">
-                <video autoplay loop muted playsinline>
-                    <source src="minty_minxy.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="project-info">
-                <div class="project-title">Minty Minxy</div>
-                <div class="project-tag">HD Video</div>
-            </div>
+            <video autoplay loop muted playsinline>
+                <source src="minty_minxy.mp4" type="video/mp4">
+            </video>
         </div>
         
         <div class="portfolio-item">
-            <div class="media-container">
-                <video autoplay loop muted playsinline>
-                    <source src="FULLANIMHEX(1).mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="project-info">
-                <div class="project-title">Full Anim Hex</div>
-                <div class="project-tag">HD Video</div>
-            </div>
+            <video autoplay loop muted playsinline>
+                <source src="FULLANIMHEX(1).mp4" type="video/mp4">
+            </video>
         </div>
 
         <div class="portfolio-item">
-            <div class="media-container">
-                <img src="jouw-afbeelding.png" alt="APNG animatie">
-            </div>
-            <div class="project-info">
-                <div class="project-title">Project Naam Drie</div>
-                <div class="project-tag">Natieve APNG Loop</div>
-            </div>
+            <img src="jouw-afbeelding.png" alt="APNG animatie">
         </div>
 
     </main>
