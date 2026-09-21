@@ -51,12 +51,12 @@ p {
     color: #ffffff;
 }
 
+/* Masonry layout via CSS columns */
 .portfolio-grid {
     max-width: 1400px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    column-count: 2;
+    column-gap: 24px;
 }
 
 .portfolio-item {
@@ -65,6 +65,10 @@ p {
     overflow: hidden;
     transition: transform 0.3s ease;
     background-color: #121212;
+    margin-bottom: 24px;
+    break-inside: avoid;
+    display: inline-block;
+    width: 100%;
 }
 
 .portfolio-item:hover {
@@ -103,6 +107,6 @@ p {
 
 @media (max-width: 900px) {
     .portfolio-grid {
-        grid-template-columns: 1fr;
+        column-count: 1;
     }
 }
