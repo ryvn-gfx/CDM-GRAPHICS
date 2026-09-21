@@ -61,6 +61,7 @@
         }
         
         .portfolio-item {
+            position: relative;
             border-radius: 12px;
             overflow: hidden;
             transition: transform 0.3s ease;
@@ -80,6 +81,28 @@
             width: 100%;
             height: auto;
             border-radius: 12px;
+        }
+
+        /* Minimalistische overlay styling */
+        .sound-hint {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 4px;
+            pointer-events: none;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .portfolio-item:hover .sound-hint {
+            opacity: 0;
         }
 
         @media (max-width: 900px) {
@@ -111,18 +134,21 @@
             <video autoplay loop muted playsinline>
                 <source src="files/SignaturePringles2.mp4" type="video/mp4">
             </video>
+            <div class="sound-hint">Hover for sound</div>
         </div>
         
         <div class="portfolio-item">
             <video autoplay loop muted playsinline>
                 <source src="files/Jinx_transrender.mp4" type="video/mp4">
             </video>
+            <div class="sound-hint">Hover for sound</div>
         </div>
         
         <div class="portfolio-item">
             <video autoplay loop muted playsinline>
                 <source src="files/minty_minxy.mp4" type="video/mp4">
             </video>
+            <div class="sound-hint">Hover for sound</div>
         </div>
 
         <div class="portfolio-item">
@@ -131,5 +157,34 @@
 
     </main>
 
+    <script>
+        const videos = document.querySelectorAll('.portfolio-item video');
+        
+        // Controleer of de sessie al ontgrendeld is
+        if (sessionStorage.getItem('audioUnlocked') === 'true') {
+            videos.forEach(video => {
+                video.muted = false;
+                video.muted = true;
+            });
+        }
+
+        // Ontgrendel audio en sla op in de sessie bij de eerste klik
+        document.body.addEventListener('click', () => {
+            sessionStorage.setItem('audioUnlocked', 'true');
+            videos.forEach(video => {
+                video.muted = false;
+                video.muted = true;
+            });
+        }, { once: true });
+
+        videos.forEach(video => {
+            video.addEventListener('mouseenter', () => {
+                video.muted = false;
+            });
+            video.addEventListener('mouseleave', () => {
+                video.muted = true;
+            });
+        });
+    </script>
 </body>
 </html>
