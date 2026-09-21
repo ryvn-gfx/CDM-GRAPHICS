@@ -1,6 +1,29 @@
-<main class="portfolio-grid">
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTFOLIO CDM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-        <!-- 1. Linksboven: Pringles -->
+    <header>
+        <h1>PORTFOLIO CDM</h1>
+        <p>Featured art, premium collection.</p>
+        
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Featured</a></li>
+                <li><a href="signatures.html">Signatures</a></li>
+                <li><a href="factions.html">Factions</a></li>
+                <li><a href="auction.html">Auction</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="portfolio-grid">
+
         <div class="portfolio-item">
             <video autoplay loop muted playsinline>
                 <source src="files/SignaturePringles2.mp4" type="video/mp4">
@@ -8,22 +31,42 @@
             <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
         </div>
 
-        <!-- 2. Linksonder: POW! (image.png) -->
-        <div class="portfolio-item">
-            <img src="files/image.png" alt="Featured Image">
-        </div>
-
-        <!-- 3. Rechtsboven: Jinx -->
         <div class="portfolio-item">
             <video autoplay loop muted playsinline>
                 <source src="files/Jinx_transrender.mp4" type="video/mp4">
             </video>
             <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
         </div>
-        
-        <!-- 4. Rechtsonder: Disdain -->
+        <div class="portfolio-item">
+            <img src="files/image.png" alt="Featured Image">
+        </div>
         <div class="portfolio-item">
             <img src="files/disdain.png" alt="Disdain Featured Art">
         </div>
 
+
     </main>
+
+    <script>
+        function toggleSound(button) {
+            const video = button.previousElementSibling;
+            
+            if (video.muted) {
+                video.muted = false;
+                button.textContent = "Mute Sound";
+            } else {
+                video.muted = true;
+                button.textContent = "Enable Sound";
+            }
+        }
+    </script>
+
+    <div id="mediaModal" class="modal">
+        <span class="close-btn">&times;</span>
+        <div class="modal-content-wrapper"></div>
+    </div>
+
+    <script src="modal.js"></script>
+
+</body>
+</html>
