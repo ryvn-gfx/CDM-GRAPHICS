@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijn Portfolio - Signatures</title>
+    <title>PORTFOLIO CDM - Signatures</title>
     <style>
         * {
             box-sizing: border-box;
@@ -25,9 +25,9 @@
             font-weight: 500;
             letter-spacing: -0.03em;
             margin-bottom: 24px;
+            text-transform: uppercase;
         }
 
-        /* Navigatie Menu */
         .nav-links {
             display: flex;
             gap: 24px;
@@ -47,7 +47,6 @@
             color: #ffffff;
         }
 
-        /* Masonry Grid Setup */
         .portfolio-grid {
             max-width: 1400px;
             margin: 0 auto;
@@ -69,14 +68,13 @@
             transform: translateY(-4px);
         }
 
-        /* Video's vullen het blok en behouden hun eigen aspect ratio */
-        .portfolio-item video {
+        .portfolio-item video,
+        .portfolio-item img {
             display: block;
             width: 100%;
             height: auto;
         }
 
-        /* Responsief: 1 kolom op kleinere schermen */
         @media (max-width: 900px) {
             .portfolio-grid {
                 column-count: 1;
@@ -87,7 +85,7 @@
 <body>
 
     <header>
-        <h1>Portfolio</h1>
+        <h1>PORTFOLIO CDM</h1>
         
         <nav>
             <ul class="nav-links">
@@ -117,6 +115,10 @@
             <video autoplay loop muted playsinline>
                 <source src="minty_minxy.mp4" type="video/mp4">
             </video>
+        </div>
+
+        <div class="portfolio-item">
+            <img src="image.png" alt="Signature Image">
         </div>
 
     </main>
