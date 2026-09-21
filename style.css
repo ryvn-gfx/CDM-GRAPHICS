@@ -12,7 +12,6 @@ body {
 }
 
 header {
-    max-width: 2100px;
     max-width: 1400px;
     margin: 0 auto 40px auto;
 }
@@ -52,10 +51,8 @@ p {
     color: #ffffff;
 }
 
-/* Masonry layout via CSS columns */
 /* Masonry layout */
 .portfolio-grid {
-    max-width: 2100px;
     max-width: 1400px;
     margin: 0 auto;
     column-count: 2;
@@ -81,10 +78,10 @@ p {
 .portfolio-item video,
 .portfolio-item img {
     display: block;
-    width: 1024px;
     width: 100%;
     height: auto;
     border-radius: 12px;
+    cursor: zoom-in;
 }
 
 .sound-toggle-btn {
@@ -109,7 +106,61 @@ p {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-@media (max-width: 2100px) {
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(11, 11, 11, 0.95);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.modal-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.close-btn {
+    position: absolute;
+    top: 24px;
+    right: 40px;
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+    transition: color 0.2s ease;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #888;
+}
+
 @media (max-width: 900px) {
     .portfolio-grid {
         column-count: 1;
