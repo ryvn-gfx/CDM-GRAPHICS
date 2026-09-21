@@ -29,6 +29,27 @@
         p {
             color: #888;
             font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        /* Navigatie Menu */
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
         }
 
         /* Masonry Grid Setup */
@@ -47,7 +68,6 @@
             break-inside: avoid;
             display: inline-block;
             width: 100%;
-            /* Zwarte achtergrond verwijderd omdat er geen tekst meer is */
         }
         
         .portfolio-item:hover {
@@ -75,6 +95,15 @@
     <header>
         <h1>Portfolio</h1>
         <p>Geselecteerd werk — HD Video & APNG Loops</p>
+        
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Featured</a></li>
+                <li><a href="#">Signatures</a></li>
+                <li><a href="#">Factions</a></li>
+                <li><a href="#">Auction</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main class="portfolio-grid">
