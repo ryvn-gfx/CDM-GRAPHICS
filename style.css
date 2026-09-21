@@ -51,12 +51,12 @@ p {
     color: #ffffff;
 }
 
-/* Masonry grid: 2 kolommen die netjes om de inhoud heen vallen */
 .portfolio-grid {
     max-width: 1400px;
     margin: 0 auto;
-    column-count: 2;
-    column-gap: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
 }
 
 .portfolio-item {
@@ -64,18 +64,19 @@ p {
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s ease;
-    margin-bottom: 24px;
-    break-inside: avoid;
-    display: inline-block;
-    width: 100%;
     background-color: #121212;
+    flex: 1 1 calc(50% - 12px);
+    max-width: calc(50% - 12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 .portfolio-item:hover {
     transform: translateY(-4px);
 }
 
-/* Video's vullen altijd netjes de breedte van de kolom */
 .portfolio-item video {
     display: block;
     width: 100%;
@@ -83,11 +84,13 @@ p {
     border-radius: 12px;
 }
 
-/* Afbeeldingen schalen netjes mee zonder opgerekt te worden */
+/* Afbeeldingen tonen op werkelijke grootte en blijven pixel-sharp zonder oprekken */
 .portfolio-item img {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: none;
     height: auto;
+    margin: 0 auto;
     border-radius: 12px;
 }
 
@@ -114,7 +117,8 @@ p {
 }
 
 @media (max-width: 900px) {
-    .portfolio-grid {
-        column-count: 1;
+    .portfolio-item {
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 }
