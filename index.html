@@ -153,7 +153,6 @@
     <script>
         const videos = document.querySelectorAll('.portfolio-item video');
         
-        // Controleer of de sessie al ontgrendeld is
         if (sessionStorage.getItem('audioUnlocked') === 'true') {
             videos.forEach(video => {
                 video.muted = false;
@@ -161,7 +160,6 @@
             });
         }
 
-        // Ontgrendel audio en sla op in de sessie bij de eerste klik
         document.body.addEventListener('click', () => {
             sessionStorage.setItem('audioUnlocked', 'true');
             videos.forEach(video => {
@@ -173,179 +171,7 @@
         videos.forEach(video => {
             video.addEventListener('mouseenter', () => {
                 video.muted = false;
-            });
-            video.addEventListener('mouseleave', () => {
-                video.muted = true;
-            });
-        });
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORTFOLIO CDM</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background-color: #0b0b0b;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            padding: 40px 20px;
-        }
-        header {
-            max-width: 1400px;
-            margin: 0 auto 40px auto;
-        }
-        h1 {
-            font-size: 2rem;
-            font-weight: 500;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        
-        p {
-            color: #888;
-            font-size: 1rem;
-            margin-bottom: 24px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 24px;
-            list-style: none;
-        }
-        .nav-links a {
-            color: #888;
-            text-decoration: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #ffffff;
-        }
-
-        .portfolio-grid {
-            max-width: 1400px;
-            margin: 0 auto;
-            column-count: 2;
-            column-gap: 24px;
-        }
-        
-        .portfolio-item {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            margin-bottom: 24px;
-            break-inside: avoid;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .portfolio-item:hover {
-            transform: translateY(-4px);
-        }
-
-        .portfolio-item video, 
-        .portfolio-item img {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-        }
-
-        /* Minimalistische overlay styling */
-        .sound-hint {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: #ffffff;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            padding: 4px 8px;
-            border-radius: 4px;
-            pointer-events: none;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(4px);
-        }
-
-        .portfolio-item:hover .sound-hint {
-            opacity: 0;
-        }
-
-        @media (max-width: 900px) {
-            .portfolio-grid {
-                column-count: 1;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>PORTFOLIO CDM</h1>
-        <p>Featured art, premium collection.</p>
-        
-        <nav>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Featured</a></li>
-                <li><a href="signatures.html">Signatures</a></li>
-                <li><a href="factions.html">Factions</a></li>
-                <li><a href="auction.html">Auction</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="portfolio-grid">
-
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/SignaturePringles2.mp4" type="video/mp4">
-            </video>
-            <div class="sound-hint">Hover for sound</div>
-        </div>
-
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/Jinx_transrender.mp4" type="video/mp4">
-            </video>
-            <div class="sound-hint">Hover for sound</div>
-        </div>
-        
-        <div class="portfolio-item">
-            <img src="files/image.png" alt="Featured Image">
-        </div>
-
-    </main>
-
-    <script>
-        const videos = document.querySelectorAll('.portfolio-item video');
-        
-        // Ontgrendel audio direct bij de eerste klik ergens op de pagina
-        document.body.addEventListener('click', () => {
-            videos.forEach(video => {
-                video.muted = false;
-                video.muted = true;
-            });
-        }, { once: true });
-
-        videos.forEach(video => {
-            video.addEventListener('mouseenter', () => {
-                video.muted = false;
+                video.play().catch(e => console.log("Play geblokkeerd door browser:", e));
             });
             video.addEventListener('mouseleave', () => {
                 video.muted = true;
