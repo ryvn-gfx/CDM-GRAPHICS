@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORTFOLIO CDM - Signatures</title>
+    <title>PORTFOLIO CDM</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
         <h1>PORTFOLIO CDM</h1>
-        <p>Profile designs.</p>
+        <p>Featured art, premium collection.</p>
         
         <nav>
             <ul class="nav-links">
@@ -23,40 +23,7 @@
     </header>
 
     <main class="portfolio-grid">
-
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/SignaturePringles2.mp4" type="video/mp4">
-            </video>
-            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
-        </div>
-        
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/Jinx_transrender.mp4" type="video/mp4">
-            </video>
-            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
-        </div>
-        
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/minty_minxy.mp4" type="video/mp4">
-            </video>
-            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
-        </div>
-
-        <div class="portfolio-item">
-            <img src="files/disdain.png" alt="Disdain Signature">
-        </div>
-
-        <div class="portfolio-item">
-            <img src="files/makima.png" alt="Makima Signature">
-        </div>
-
-        <div class="portfolio-item">
-            <img src="files/image.png" alt="Signature Image">
-        </div>
-
+        <!-- Plaats hier je .portfolio-item divs voor Signatures -->
     </main>
 
     <script>
@@ -72,5 +39,13 @@
             }
         }
     </script>
+
+    <div id="mediaModal" class="modal">
+        <span class="close-btn">&times;</span>
+        <div class="modal-content-wrapper"></div>
+    </div>
+
+    <script src="modal.js"></script>
+
 </body>
 </html>
