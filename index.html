@@ -61,7 +61,7 @@
         }
         
         .portfolio-item {
-            position: relative; /* Nodig om de overlay te positioneren */
+            position: relative;
             border-radius: 12px;
             overflow: hidden;
             transition: transform 0.3s ease;
@@ -95,13 +95,12 @@
             text-transform: uppercase;
             padding: 4px 8px;
             border-radius: 4px;
-            pointer-events: none; /* Zorgt dat de muis er dwars doorheen klikt/hoverd */
+            pointer-events: none;
             opacity: 0.8;
             transition: opacity 0.3s ease;
             backdrop-filter: blur(4px);
         }
 
-        /* Verberg de tekst zodra je over het item hoovert */
         .portfolio-item:hover .sound-hint {
             opacity: 0;
         }
@@ -153,6 +152,15 @@
 
     <script>
         const videos = document.querySelectorAll('.portfolio-item video');
+        
+        // Ontgrendel audio direct bij de eerste klik ergens op de pagina
+        document.body.addEventListener('click', () => {
+            videos.forEach(video => {
+                video.muted = false;
+                video.muted = true;
+            });
+        }, { once: true });
+
         videos.forEach(video => {
             video.addEventListener('mouseenter', () => {
                 video.muted = false;
