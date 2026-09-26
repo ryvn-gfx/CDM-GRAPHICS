@@ -11,7 +11,7 @@
     <header>
         <h1>PORTFOLIO CDM</h1>
         <p>Art for factions.</p>
-        
+
         <nav>
             <ul class="nav-links">
                 <li><a href="index.html">Featured</a></li>
@@ -38,12 +38,26 @@
             <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
         </div>
 
+        <div class="portfolio-item">
+            <video autoplay loop muted playsinline>
+                <source src="files/flyingdoctors.mp4" type="video/mp4">
+            </video>
+            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
+        </div>
+
+        <div class="portfolio-item">
+            <video autoplay loop muted playsinline>
+                <source src="files/darkhearts.mp4" type="video/mp4">
+            </video>
+            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
+        </div>
+
     </main>
 
     <script>
         function toggleSound(button) {
             const video = button.previousElementSibling;
-            
+
             if (video.muted) {
                 video.muted = false;
                 button.textContent = "Mute Sound";
