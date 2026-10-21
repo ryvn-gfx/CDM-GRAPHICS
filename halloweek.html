@@ -13,7 +13,7 @@
 
 html {
     min-height: 100%;
-    background: #17191b;
+    background: #0c0d0e;
 }
 
 body {
@@ -22,46 +22,58 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: #fff;
 
-    /* High-resolution dark graphite background */
-    background-color: #191b1d;
-
+    /* Dark, fine-grain graphite texture */
+    background-color: #0c0d0e;
     background-image:
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E"),
         radial-gradient(
-            ellipse at 50% 15%,
-            #34383b 0%,
-            #25282b 35%,
-            #191b1d 75%,
-            #111315 100%
+            ellipse at 50% 12%,
+            #202225 0%,
+            #141618 40%,
+            #0c0d0e 85%
         );
-
     background-blend-mode: soft-light, normal;
     background-attachment: fixed;
 }
 
-/* Main gallery */
+/* Header */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 20px 8px;
+    text-align: center;
+}
+
+.vr-logo {
+    display: block;
+    width: 194px;
+    height: 105px;
+    object-fit: contain;
+}
+
+/* Gallery */
 .gallery {
     display: grid;
     grid-template-columns: repeat(3, 265px);
-    column-gap: 28px;
-    row-gap: 48px;
-
+    column-gap: 12px;
+    row-gap: 18px;
     width: max-content;
     max-width: 100%;
     margin: 0 auto;
-    padding: 35px 20px 70px;
+    padding: 20px 10px 45px;
 }
 
-/* Each award */
+/* Award */
 .award {
     width: 265px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 7px;
 }
 
-/* Exact original image dimensions */
+/* Original medal dimensions */
 .medal {
     display: block;
     width: 265px;
@@ -73,40 +85,40 @@ body {
     box-shadow: none;
 }
 
-/* Animation button */
+/* Minimal animation button */
 .animation-btn {
-    padding: 10px 20px;
-    min-width: 110px;
-
-    background: #1c1c1c;
-    color: #f5d2a5;
-
-    border: 1px solid #c47a20;
-    border-radius: 4px;
-
-    font-size: 14px;
+    padding: 5px 9px;
+    min-width: 0;
+    background: #252729;
+    color: #bfc1c3;
+    border: none;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .8px;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background .2s, color .2s, border-color .2s;
+    transition: background .2s, color .2s;
 }
 
 .animation-btn:hover {
-    background: #c47a20;
-    color: #111;
+    background: #393c40;
+    color: #fff;
 }
 
 .animation-btn.active {
-    background: #c47a20;
-    color: #111;
+    background: #45484b;
+    color: #fff;
 }
 
 /* Responsive */
-@media (max-width: 920px) {
+@media (max-width: 825px) {
     .gallery {
         grid-template-columns: repeat(2, 265px);
     }
 }
 
-@media (max-width: 610px) {
+@media (max-width: 550px) {
     .gallery {
         grid-template-columns: 265px;
     }
@@ -115,6 +127,16 @@ body {
 </head>
 
 <body>
+
+<header class="header">
+    <img
+        class="vr-logo"
+        src="https://iili.io/nNtMMs2.png"
+        width="194"
+        height="105"
+        alt="VR Logo"
+    >
+</header>
 
 <main class="gallery" id="gallery"></main>
 
@@ -145,14 +167,12 @@ medals.forEach((url, index) => {
 
     const button = document.createElement("button");
     button.className = "animation-btn";
-    button.textContent = "Animation";
+    button.textContent = "ANIMATION";
 
     let playing = false;
     let staticFrame = null;
 
-    // Capture the first frame as a still preview.
     const loader = new Image();
-
     loader.crossOrigin = "anonymous";
 
     loader.onload = () => {
@@ -167,8 +187,6 @@ medals.forEach((url, index) => {
             staticFrame = canvas.toDataURL("image/png");
             if (!playing) image.src = staticFrame;
         } catch (e) {
-            // Cross-origin restrictions may prevent capture.
-            // Use the original image as fallback.
             if (!playing) image.src = url;
         }
     };
@@ -183,13 +201,12 @@ medals.forEach((url, index) => {
         playing = !playing;
 
         if (playing) {
-            // Reload APNG to start animation from frame 1.
             image.src = url;
-            button.textContent = "Stop Animation";
+            button.textContent = "STOP";
             button.classList.add("active");
         } else {
             image.src = staticFrame || url;
-            button.textContent = "Animation";
+            button.textContent = "ANIMATION";
             button.classList.remove("active");
         }
     });
