@@ -1,79 +1,103 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORTFOLIO CDM</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halloweek Awards</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 30px 16px;
+    color: #f5f5f5;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    /* Modern charcoal texture: soft illumination + extremely fine matte grain. */
+    background-color: #191b1e;
+    background-image:
+      radial-gradient(ellipse 85% 65% at 50% 4%, rgba(105,110,117,.18), transparent 75%),
+      radial-gradient(ellipse 65% 80% at 100% 100%, rgba(0,0,0,.22), transparent 75%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.11' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+  .awards-grid { display: grid; grid-template-columns: repeat(3, 211px); gap: 22px; justify-content: center; }
+  .award { width: 211px; text-align: center; }
+  .art { position: relative; width: 211px; height: 265px; }
+  .art canvas, .art img { width: 211px; height: 265px; object-fit: fill; display: block; }
+  .art img[hidden], .art canvas[hidden] { display: none; }
+  .award button { margin-top: 10px; padding: 8px 17px; background: #252525; border: 1px solid #c77721; border-radius: 4px; color: #ffd6a4; font: inherit; cursor: pointer; }
+  .award button:hover { background: #47301d; }
+  .award button:focus-visible { outline: 2px solid #ffb65d; outline-offset: 3px; }
+  @media (max-width: 730px) { .awards-grid { grid-template-columns: repeat(2, 211px); } }
+  @media (max-width: 480px) { .awards-grid { grid-template-columns: 211px; } }
+</style>
 </head>
 <body>
+<main class="awards-grid" id="awardsGrid" aria-label="Halloweek awards"></main>
+<script>
+  // The APNG links, ordered left-to-right and top-to-bottom.
+  const awards = [
+    'https://iili.io/nNL89YN.png',
+    'https://iili.io/nNtRYqG.png',
+    'https://iili.io/nNtnzrP.png',
+    'https://iili.io/nNt3iga.png',
+    'https://iili.io/nNZyLJV.png',
+    'https://iili.io/nNZmqzu.png',
+    'https://iili.io/nNZQmFI.png',
+    'https://iili.io/nNZiR2e.png',
+    'https://iili.io/nNZ6Tt2.png'
+  ];
 
-    <header>
-        <h1>PORTFOLIO CDM</h1>
-        <p>Art for factions.</p>
+  const grid = document.getElementById('awardsGrid');
+  awards.forEach((url, index) => {
+    const card = document.createElement('div');
+    card.className = 'award';
+    const art = document.createElement('div');
+    art.className = 'art';
 
-        <nav>
-            <ul class="nav-links">
-                <li><a href="index.html">Featured</a></li>
-                <li><a href="signatures.html">Signatures</a></li>
-                <li><a href="factions.html" class="active">Factions</a></li>
-                <li><a href="auction.html">Auction</a></li>
-            </ul>
-        </nav>
-    </header>
+    // Draw a single frame of the APNG onto a canvas, which cannot animate.
+    // Canvas drawing does not require CORS when no pixel data is read back.
+    const canvas = document.createElement('canvas');
+    canvas.width = 211;
+    canvas.height = 265;
+    canvas.setAttribute('role', 'img');
+    canvas.setAttribute('aria-label', `Halloweek medal ${index + 1}, static preview`);
+    const preview = new Image();
+    preview.onload = () => {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 211, 265);
+      // Render the entire supplied frame at the exact requested display size.
+      ctx.drawImage(preview, 0, 0, 211, 265);
+    };
+    preview.src = url;
 
-    <main class="portfolio-grid">
+    const animation = document.createElement('img');
+    animation.alt = `Halloweek medal ${index + 1} animation`;
+    animation.hidden = true;
 
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/FULLANIMHEX(1).mp4" type="video/mp4">
-            </video>
-            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
-        </div>
-
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/lunatica_hd-2_s.mp4" type="video/mp4">
-            </video>
-            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
-        </div>
-
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/flyingdoctors.mp4" type="video/mp4">
-            </video>
-            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
-        </div>
-
-        <div class="portfolio-item">
-            <video autoplay loop muted playsinline>
-                <source src="files/darkhearts.mp4" type="video/mp4">
-            </video>
-            <button class="sound-toggle-btn" onclick="toggleSound(this)">Enable Sound</button>
-        </div>
-
-    </main>
-
-    <script>
-        function toggleSound(button) {
-            const video = button.previousElementSibling;
-
-            if (video.muted) {
-                video.muted = false;
-                button.textContent = "Mute Sound";
-            } else {
-                video.muted = true;
-                button.textContent = "Enable Sound";
-            }
-        }
-    </script>
-
-    <div id="mediaModal" class="modal">
-        <span class="close-btn">&times;</span>
-        <div class="modal-content-wrapper"></div>
-    </div>
-
-    <script src="modal.js"></script>
-
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = 'Animation';
+    button.setAttribute('aria-pressed', 'false');
+    let playing = false;
+    button.addEventListener('click', () => {
+      playing = !playing;
+      canvas.hidden = playing;
+      animation.hidden = !playing;
+      if (playing) {
+        // Fresh URL load ensures the APNG restarts when selected.
+        animation.src = `${url}?play=${Date.now()}`;
+      } else {
+        animation.removeAttribute('src');
+      }
+      button.textContent = playing ? 'Stop Animation' : 'Animation';
+      button.setAttribute('aria-pressed', String(playing));
+    });
+    art.append(canvas, animation);
+    card.append(art, button);
+    grid.append(card);
+  });
+</script>
 </body>
 </html>
