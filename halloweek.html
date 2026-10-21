@@ -1,103 +1,204 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Halloweek Awards</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VR Halloweek Awards 2026</title>
+
 <style>
-  :root { color-scheme: dark; }
-  * { box-sizing: border-box; }
-  body {
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: #17191b;
+}
+
+body {
     margin: 0;
     min-height: 100vh;
-    padding: 30px 16px;
-    color: #f5f5f5;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    /* Modern charcoal texture: soft illumination + extremely fine matte grain. */
-    background-color: #191b1e;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+
+    /* High-resolution dark graphite background */
+    background-color: #191b1d;
+
     background-image:
-      radial-gradient(ellipse 85% 65% at 50% 4%, rgba(105,110,117,.18), transparent 75%),
-      radial-gradient(ellipse 65% 80% at 100% 100%, rgba(0,0,0,.22), transparent 75%),
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.11' filter='url(%23n)'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E"),
+        radial-gradient(
+            ellipse at 50% 15%,
+            #34383b 0%,
+            #25282b 35%,
+            #191b1d 75%,
+            #111315 100%
+        );
+
+    background-blend-mode: soft-light, normal;
     background-attachment: fixed;
-  }
-  .awards-grid { display: grid; grid-template-columns: repeat(3, 211px); gap: 22px; justify-content: center; }
-  .award { width: 211px; text-align: center; }
-  .art { position: relative; width: 211px; height: 265px; }
-  .art canvas, .art img { width: 211px; height: 265px; object-fit: fill; display: block; }
-  .art img[hidden], .art canvas[hidden] { display: none; }
-  .award button { margin-top: 10px; padding: 8px 17px; background: #252525; border: 1px solid #c77721; border-radius: 4px; color: #ffd6a4; font: inherit; cursor: pointer; }
-  .award button:hover { background: #47301d; }
-  .award button:focus-visible { outline: 2px solid #ffb65d; outline-offset: 3px; }
-  @media (max-width: 730px) { .awards-grid { grid-template-columns: repeat(2, 211px); } }
-  @media (max-width: 480px) { .awards-grid { grid-template-columns: 211px; } }
+}
+
+/* Main gallery */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 265px);
+    column-gap: 28px;
+    row-gap: 48px;
+
+    width: max-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 35px 20px 70px;
+}
+
+/* Each award */
+.award {
+    width: 265px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Exact original image dimensions */
+.medal {
+    display: block;
+    width: 265px;
+    height: 211px;
+    max-width: none;
+    object-fit: fill;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Animation button */
+.animation-btn {
+    padding: 10px 20px;
+    min-width: 110px;
+
+    background: #1c1c1c;
+    color: #f5d2a5;
+
+    border: 1px solid #c47a20;
+    border-radius: 4px;
+
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s;
+}
+
+.animation-btn:hover {
+    background: #c47a20;
+    color: #111;
+}
+
+.animation-btn.active {
+    background: #c47a20;
+    color: #111;
+}
+
+/* Responsive */
+@media (max-width: 920px) {
+    .gallery {
+        grid-template-columns: repeat(2, 265px);
+    }
+}
+
+@media (max-width: 610px) {
+    .gallery {
+        grid-template-columns: 265px;
+    }
+}
 </style>
 </head>
+
 <body>
-<main class="awards-grid" id="awardsGrid" aria-label="Halloweek awards"></main>
+
+<main class="gallery" id="gallery"></main>
+
 <script>
-  // The APNG links, ordered left-to-right and top-to-bottom.
-  const awards = [
-    'https://iili.io/nNL89YN.png',
-    'https://iili.io/nNtRYqG.png',
-    'https://iili.io/nNtnzrP.png',
-    'https://iili.io/nNt3iga.png',
-    'https://iili.io/nNZyLJV.png',
-    'https://iili.io/nNZmqzu.png',
-    'https://iili.io/nNZQmFI.png',
-    'https://iili.io/nNZiR2e.png',
-    'https://iili.io/nNZ6Tt2.png'
-  ];
+const medals = [
+    "https://iili.io/nNL89YN.png",
+    "https://iili.io/nNtRYqG.png",
+    "https://iili.io/nNtnzrP.png",
+    "https://iili.io/nNt3iga.png",
+    "https://iili.io/nNZyLJV.png",
+    "https://iili.io/nNZmqzu.png",
+    "https://iili.io/nNZQmFI.png",
+    "https://iili.io/nNZiR2e.png",
+    "https://iili.io/nNZ6Tt2.png"
+];
 
-  const grid = document.getElementById('awardsGrid');
-  awards.forEach((url, index) => {
-    const card = document.createElement('div');
-    card.className = 'award';
-    const art = document.createElement('div');
-    art.className = 'art';
+const gallery = document.getElementById("gallery");
 
-    // Draw a single frame of the APNG onto a canvas, which cannot animate.
-    // Canvas drawing does not require CORS when no pixel data is read back.
-    const canvas = document.createElement('canvas');
-    canvas.width = 211;
-    canvas.height = 265;
-    canvas.setAttribute('role', 'img');
-    canvas.setAttribute('aria-label', `Halloweek medal ${index + 1}, static preview`);
-    const preview = new Image();
-    preview.onload = () => {
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, 211, 265);
-      // Render the entire supplied frame at the exact requested display size.
-      ctx.drawImage(preview, 0, 0, 211, 265);
-    };
-    preview.src = url;
+medals.forEach((url, index) => {
+    const award = document.createElement("div");
+    award.className = "award";
 
-    const animation = document.createElement('img');
-    animation.alt = `Halloweek medal ${index + 1} animation`;
-    animation.hidden = true;
+    const image = document.createElement("img");
+    image.className = "medal";
+    image.alt = "Halloweek Medal " + (index + 1);
+    image.width = 265;
+    image.height = 211;
 
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = 'Animation';
-    button.setAttribute('aria-pressed', 'false');
+    const button = document.createElement("button");
+    button.className = "animation-btn";
+    button.textContent = "Animation";
+
     let playing = false;
-    button.addEventListener('click', () => {
-      playing = !playing;
-      canvas.hidden = playing;
-      animation.hidden = !playing;
-      if (playing) {
-        // Fresh URL load ensures the APNG restarts when selected.
-        animation.src = `${url}?play=${Date.now()}`;
-      } else {
-        animation.removeAttribute('src');
-      }
-      button.textContent = playing ? 'Stop Animation' : 'Animation';
-      button.setAttribute('aria-pressed', String(playing));
+    let staticFrame = null;
+
+    // Capture the first frame as a still preview.
+    const loader = new Image();
+
+    loader.crossOrigin = "anonymous";
+
+    loader.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = loader.naturalWidth;
+        canvas.height = loader.naturalHeight;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(loader, 0, 0);
+
+        try {
+            staticFrame = canvas.toDataURL("image/png");
+            if (!playing) image.src = staticFrame;
+        } catch (e) {
+            // Cross-origin restrictions may prevent capture.
+            // Use the original image as fallback.
+            if (!playing) image.src = url;
+        }
+    };
+
+    loader.onerror = () => {
+        image.src = url;
+    };
+
+    loader.src = url;
+
+    button.addEventListener("click", () => {
+        playing = !playing;
+
+        if (playing) {
+            // Reload APNG to start animation from frame 1.
+            image.src = url;
+            button.textContent = "Stop Animation";
+            button.classList.add("active");
+        } else {
+            image.src = staticFrame || url;
+            button.textContent = "Animation";
+            button.classList.remove("active");
+        }
     });
-    art.append(canvas, animation);
-    card.append(art, button);
-    grid.append(card);
-  });
+
+    award.appendChild(image);
+    award.appendChild(button);
+    gallery.appendChild(award);
+});
 </script>
+
 </body>
 </html>
