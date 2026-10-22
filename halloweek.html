@@ -67,13 +67,13 @@ body {
     color: #fff;
 }
 
-/* Global animation button */
+/* Hover toggle */
 .animate-all {
     margin-top: 18px;
     padding: 7px 16px;
     background: #242424;
     color: #ccc;
-    border: none;
+    border: 1px solid #343434;
     border-radius: 3px;
     font-size: 11px;
     font-weight: 600;
@@ -85,6 +85,12 @@ body {
 .animate-all:hover {
     background: #393939;
     color: #fff;
+}
+
+.animate-all.enabled {
+    background: #303030;
+    color: #fff;
+    border-color: #555;
 }
 
 .animate-all:disabled {
@@ -114,12 +120,14 @@ body {
 .medal {
     display: block;
     width: 265px;
-    height: 211px;
-    max-width: none;
-    object-fit: fill;
+    height: auto;
+    aspect-ratio: 305 / 205;
+    object-fit: contain;
     border: none;
     border-radius: 0;
     box-shadow: none;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 /* Footer */
@@ -176,7 +184,13 @@ body {
         Official Halloweek Dashboard ↗
     </a>
 
-    <button class="animate-all" id="animateAll" disabled>
+    <button
+        class="animate-all"
+        id="animateAll"
+        type="button"
+        disabled
+        aria-pressed="false"
+    >
         LOADING...
     </button>
 </header>
@@ -195,82 +209,28 @@ body {
 </footer>
 
 <script>
+/* All 10 Halloweek medals */
 const medals = [
-    "https://iili.io/nNL89YN.png",
-    "https://iili.io/nNtRYqG.png",
-    "https://iili.io/nNtnzrP.png",
-    "https://iili.io/nNt3iga.png",
-    "https://iili.io/nNZyLJV.png",
-    "https://iili.io/nNZmqzu.png",
-    "https://iili.io/nNZQmFI.png",
-    "https://iili.io/nNZiR2e.png",
-    "https://iili.io/nNtsWBV.png"
+    "https://iili.io/nOETcuf.png",
+    "https://iili.io/nOGLF4e.png",
+    "https://iili.io/nOGLf3u.png",
+    "https://iili.io/nOGsPhN.png",
+    "https://iili.io/nOGLuG1.png",
+    "https://iili.io/nOGL7aa.png",
+    "https://iili.io/nOGLN9f.png",
+    "https://iili.io/nOGL4cu.png",
+    "https://iili.io/nOGLsAx.png",
+    "https://iili.io/nOGLkt2.png"
 ];
 
 const gallery = document.getElementById("gallery");
 const animateButton = document.getElementById("animateAll");
 
 const items = [];
-let playing = false;
+let hoverEnabled = false;
 
 /*
- * Read APNG frame timing.
- * Returns the duration of one complete animation cycle.
- */
-function readAPNGDuration(buffer) {
-    const view = new DataView(buffer);
-
-    const signature = [
-        137, 80, 78, 71, 13, 10, 26, 10
-    ];
-
-    if (view.byteLength < 8 ||
-        !signature.every((b, i) => view.getUint8(i) === b)) {
-        return 0;
-    }
-
-    let offset = 8;
-    let duration = 0;
-    let animated = false;
-
-    while (offset + 12 <= view.byteLength) {
-        const length = view.getUint32(offset);
-        const typeOffset = offset + 4;
-        const dataOffset = offset + 8;
-        const next = dataOffset + length + 4;
-
-        if (next > view.byteLength) break;
-
-        const type = String.fromCharCode(
-            view.getUint8(typeOffset),
-            view.getUint8(typeOffset + 1),
-            view.getUint8(typeOffset + 2),
-            view.getUint8(typeOffset + 3)
-        );
-
-        if (type === "acTL") {
-            animated = true;
-        }
-
-        if (type === "fcTL" && length >= 26) {
-            const numerator = view.getUint16(dataOffset + 20);
-            const denominator =
-                view.getUint16(dataOffset + 22) || 100;
-
-            duration += 1000 * numerator / denominator;
-        }
-
-        if (type === "IEND") break;
-
-        offset = next;
-    }
-
-    return animated ? duration : 0;
-}
-
-/*
- * Extract the static first frame from an APNG.
- * Canvas rendering is used only for the preview.
+ * Extract a static preview from an APNG.
  */
 function makeStaticPreview(blob) {
     return new Promise((resolve, reject) => {
@@ -303,7 +263,39 @@ function makeStaticPreview(blob) {
     });
 }
 
-/* Create gallery */
+/*
+ * Stop animation and restore the static preview.
+ */
+function stopAnimation(item) {
+    if (!item.staticFrame) return;
+
+    item.image.src = item.staticFrame;
+    item.playing = false;
+}
+
+/*
+ * Start an individual medal animation.
+ */
+function startAnimation(item) {
+    if (!hoverEnabled || item.playing || !item.animationURL) {
+        return;
+    }
+
+    item.playing = true;
+
+    // Replace the image element to restart APNG playback.
+    const replacement = item.image.cloneNode(false);
+    replacement.removeAttribute("src");
+
+    item.image.replaceWith(replacement);
+    item.image = replacement;
+
+    replacement.src = item.animationURL;
+}
+
+/*
+ * Build gallery.
+ */
 medals.forEach((url, index) => {
     const award = document.createElement("div");
     award.className = "award";
@@ -311,23 +303,35 @@ medals.forEach((url, index) => {
     const image = document.createElement("img");
     image.className = "medal";
     image.width = 265;
-    image.height = 211;
     image.alt = "Halloweek Medal " + (index + 1);
+    image.draggable = false;
 
     award.appendChild(image);
     gallery.appendChild(award);
 
-    items.push({
+    const item = {
         url,
         image,
+        award,
         staticFrame: null,
         animationURL: null,
-        duration: 0,
-        timer: null
+        playing: false
+    };
+
+    items.push(item);
+
+    award.addEventListener("mouseenter", () => {
+        startAnimation(item);
+    });
+
+    award.addEventListener("mouseleave", () => {
+        stopAnimation(item);
     });
 });
 
-/* Load APNGs and prepare static previews */
+/*
+ * Load each APNG and prepare its static preview.
+ */
 async function prepareMedal(item) {
     const response = await fetch(item.url);
 
@@ -336,67 +340,67 @@ async function prepareMedal(item) {
     }
 
     const blob = await response.blob();
-    const buffer = await blob.arrayBuffer();
 
-    item.duration = readAPNGDuration(buffer);
     item.staticFrame = await makeStaticPreview(blob);
-
-    // Use a local blob URL so every replay can restart cleanly.
     item.animationURL = URL.createObjectURL(blob);
 
     item.image.src = item.staticFrame;
 }
 
-/* Start all animations together */
-function animateAll() {
-    if (playing) return;
+/*
+ * Toggle hover animations.
+ */
+animateButton.addEventListener("click", () => {
+    hoverEnabled = !hoverEnabled;
 
-    playing = true;
-    animateButton.disabled = true;
-    animateButton.textContent = "PLAYING...";
-
-    const startTime = performance.now();
-
-    items.forEach(item => {
-        // Force a fresh image element to restart APNG playback.
-        const newImage = item.image.cloneNode(false);
-        newImage.removeAttribute("src");
-
-        item.image.replaceWith(newImage);
-        item.image = newImage;
-
-        item.image.src = item.animationURL;
-
-        const duration = item.duration || 3000;
-
-        item.timer = setTimeout(() => {
-            item.image.src = item.staticFrame;
-        }, duration);
-    });
-
-    const longestDuration = Math.max(
-        ...items.map(item => item.duration || 3000)
+    animateButton.classList.toggle(
+        "enabled",
+        hoverEnabled
     );
 
-    setTimeout(() => {
-        playing = false;
-        animateButton.disabled = false;
-        animateButton.textContent = "ANIMATE ALL";
-    }, longestDuration + 100);
-}
+    animateButton.setAttribute(
+        "aria-pressed",
+        String(hoverEnabled)
+    );
 
-/* Initialize */
+    animateButton.textContent = hoverEnabled
+        ? "DISABLE HOVER ANIMATIONS"
+        : "ENABLE HOVER ANIMATIONS";
+
+    if (!hoverEnabled) {
+        items.forEach(stopAnimation);
+    } else {
+        items.forEach(item => {
+            if (item.award.matches(":hover")) {
+                startAnimation(item);
+            }
+        });
+    }
+});
+
+/*
+ * Initialize.
+ */
 Promise.all(items.map(prepareMedal))
     .then(() => {
         animateButton.disabled = false;
-        animateButton.textContent = "ANIMATE ALL";
+        animateButton.textContent = "ENABLE HOVER ANIMATIONS";
     })
     .catch(error => {
         console.error("Medal loading error:", error);
-        animateButton.textContent = "ANIMATION UNAVAILABLE";
+        animateButton.textContent = "ANIMATIONS UNAVAILABLE";
     });
 
-animateButton.addEventListener("click", animateAll);
+/*
+ * Clean up animation URLs.
+ */
+window.addEventListener("pagehide", () => {
+    items.forEach(item => {
+        if (item.animationURL) {
+            URL.revokeObjectURL(item.animationURL);
+        }
+    });
+});
 </script>
 
 </body>
