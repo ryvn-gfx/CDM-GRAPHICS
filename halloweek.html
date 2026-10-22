@@ -7,9 +7,7 @@
 <title>VR Halloweek Awards 2026</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html {
     min-height: 100%;
@@ -22,16 +20,10 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: #fff;
     background-color: #080808;
-
     background-image:
-        radial-gradient(
-            ellipse at center,
-            transparent 15%,
-            rgba(0,0,0,.6) 100%
-        ),
+        radial-gradient(ellipse at center, transparent 15%, rgba(0,0,0,.6) 100%),
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' seed='12' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23grain)' opacity='.16'/%3E%3C/svg%3E"),
         linear-gradient(#101010, #080808);
-
     background-blend-mode: normal, soft-light, normal;
     background-attachment: fixed;
 }
@@ -60,14 +52,10 @@ body {
     letter-spacing: 1.5px;
     text-transform: uppercase;
     text-decoration: none;
-    transition: color .2s;
 }
 
-.dashboard-link:hover {
-    color: #fff;
-}
+.dashboard-link:hover { color: #fff; }
 
-/* Hover animation button */
 .animate-all {
     margin-top: 18px;
     padding: 7px 16px;
@@ -79,7 +67,6 @@ body {
     font-weight: 600;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: background .2s, color .2s;
 }
 
 .animate-all:hover {
@@ -98,7 +85,6 @@ body {
     cursor: default;
 }
 
-/* Instructions */
 .instructions {
     margin: 12px 0 0;
     color: #777;
@@ -124,13 +110,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
 }
 
 .medal-frame {
     width: 305px;
     height: 205px;
-    position: relative;
 }
 
 .medal {
@@ -138,27 +122,10 @@ body {
     width: 305px;
     height: 205px;
     object-fit: contain;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
     user-select: none;
     -webkit-user-drag: none;
 }
 
-/* Animated medal overlay */
-.medal-animated {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.medal-animated.visible {
-    opacity: 1;
-}
-
-/* Medal titles */
 .award-title {
     margin-top: 5px;
     color: #777;
@@ -184,9 +151,7 @@ body {
     text-decoration: none;
 }
 
-.footer a:hover {
-    color: #bbb;
-}
+.footer a:hover { color: #bbb; }
 
 /* Responsive */
 @media (max-width: 950px) {
@@ -252,7 +217,6 @@ body {
 </footer>
 
 <script>
-/* All 10 Halloweek medals */
 const medals = [
     { title: "Executioner", url: "https://iili.io/nOETcuf.png" },
     { title: "Raging Bull", url: "https://iili.io/nOGLF4e.png" },
@@ -272,9 +236,7 @@ const animateButton = document.getElementById("animateAll");
 const items = [];
 let hoverEnabled = false;
 
-/*
- * Generate a static PNG preview from the APNG.
- */
+/* Extract a static image from an APNG */
 function makeStaticPreview(blob) {
     return new Promise((resolve, reject) => {
         const url = URL.createObjectURL(blob);
@@ -285,10 +247,7 @@ function makeStaticPreview(blob) {
                 const canvas = document.createElement("canvas");
                 canvas.width = image.naturalWidth;
                 canvas.height = image.naturalHeight;
-
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(image, 0, 0);
-
+                canvas.getContext("2d").drawImage(image, 0, 0);
                 resolve(canvas.toDataURL("image/png"));
             } catch (error) {
                 reject(error);
@@ -307,51 +266,50 @@ function makeStaticPreview(blob) {
 }
 
 /*
- * Stop animation by removing only the overlay.
- * The static image underneath remains untouched.
+ * Stop without hiding or replacing the element.
  */
 function stopAnimation(item) {
     item.playing = false;
+    item.requestId++;
 
-    if (item.animatedImage) {
-        item.animatedImage.remove();
-        item.animatedImage = null;
+    if (item.staticFrame) {
+        item.image.src = item.staticFrame;
     }
 }
 
 /*
- * Start an individual hover animation.
+ * Start by preloading the APNG.
+ * No hidden image, no overlapping static image.
  */
-function startAnimation(item) {
-    if (!hoverEnabled || item.playing || !item.animationURL) {
+async function startAnimation(item) {
+    if (!hoverEnabled || item.playing || !item.animationURL) return;
+
+    item.playing = true;
+    const requestId = ++item.requestId;
+
+    const preload = new Image();
+    preload.src = item.animationURL;
+
+    try {
+        await preload.decode();
+    } catch (error) {
+        // Some browsers may not support decoding APNG fully.
+    }
+
+    if (
+        !hoverEnabled ||
+        !item.playing ||
+        requestId !== item.requestId ||
+        !item.frame.matches(":hover")
+    ) {
         return;
     }
 
-    item.playing = true;
-
-    const animated = document.createElement("img");
-    animated.className = "medal medal-animated";
-    animated.alt = "";
-    animated.draggable = false;
-
-    item.animatedImage = animated;
-    item.frame.appendChild(animated);
-
-    animated.onload = () => {
-        if (
-            item.playing &&
-            item.animatedImage === animated
-        ) {
-            animated.classList.add("visible");
-        }
-    };
-
-    animated.src = item.animationURL;
+    // One visible image only.
+    item.image.src = item.animationURL;
 }
 
-/*
- * Build gallery.
- */
+/* Build gallery */
 medals.forEach((medal) => {
     const award = document.createElement("div");
     award.className = "award";
@@ -364,10 +322,7 @@ medals.forEach((medal) => {
     image.width = 305;
     image.height = 205;
     image.alt = "";
-    image.setAttribute(
-        "aria-label",
-        "Halloweek Medal: " + medal.title
-    );
+    image.setAttribute("aria-label", "Halloweek Medal: " + medal.title);
     image.draggable = false;
 
     const title = document.createElement("div");
@@ -385,30 +340,20 @@ medals.forEach((medal) => {
         frame,
         staticFrame: null,
         animationURL: null,
-        animatedImage: null,
-        playing: false
+        playing: false,
+        requestId: 0
     };
 
     items.push(item);
 
-    frame.addEventListener("mouseenter", () => {
-        startAnimation(item);
-    });
-
-    frame.addEventListener("mouseleave", () => {
-        stopAnimation(item);
-    });
+    frame.addEventListener("mouseenter", () => startAnimation(item));
+    frame.addEventListener("mouseleave", () => stopAnimation(item));
 });
 
-/*
- * Download each APNG and prepare its static preview.
- */
+/* Prepare medals */
 async function prepareMedal(item) {
     const response = await fetch(item.url);
-
-    if (!response.ok) {
-        throw new Error("Failed to load " + item.url);
-    }
+    if (!response.ok) throw new Error("Failed to load " + item.url);
 
     const blob = await response.blob();
 
@@ -418,21 +363,12 @@ async function prepareMedal(item) {
     item.image.src = item.staticFrame;
 }
 
-/*
- * Enable or disable hover animations.
- */
+/* Toggle hover animations */
 animateButton.addEventListener("click", () => {
     hoverEnabled = !hoverEnabled;
 
-    animateButton.classList.toggle(
-        "enabled",
-        hoverEnabled
-    );
-
-    animateButton.setAttribute(
-        "aria-pressed",
-        String(hoverEnabled)
-    );
+    animateButton.classList.toggle("enabled", hoverEnabled);
+    animateButton.setAttribute("aria-pressed", String(hoverEnabled));
 
     animateButton.textContent = hoverEnabled
         ? "DISABLE HOVER ANIMATIONS"
@@ -449,31 +385,20 @@ animateButton.addEventListener("click", () => {
     }
 });
 
-/*
- * Initialize all medals.
- */
+/* Initialize */
 Promise.all(items.map(prepareMedal))
     .then(() => {
         animateButton.disabled = false;
-        animateButton.textContent =
-            "ENABLE HOVER ANIMATIONS";
+        animateButton.textContent = "ENABLE HOVER ANIMATIONS";
     })
     .catch(error => {
         console.error("Medal loading error:", error);
-        animateButton.textContent =
-            "ANIMATIONS UNAVAILABLE";
+        animateButton.textContent = "ANIMATIONS UNAVAILABLE";
     });
 
-/*
- * Clean up animation resources.
- */
 window.addEventListener("pagehide", () => {
     items.forEach(item => {
-        stopAnimation(item);
-
-        if (item.animationURL) {
-            URL.revokeObjectURL(item.animationURL);
-        }
+        if (item.animationURL) URL.revokeObjectURL(item.animationURL);
     });
 });
 </script>
