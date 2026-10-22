@@ -7,7 +7,9 @@
 <title>VR Halloweek Awards 2026</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 html {
     min-height: 100%;
@@ -20,10 +22,16 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: #fff;
     background-color: #080808;
+
     background-image:
-        radial-gradient(ellipse at center, transparent 15%, rgba(0,0,0,.6) 100%),
+        radial-gradient(
+            ellipse at center,
+            transparent 15%,
+            rgba(0,0,0,.6) 100%
+        ),
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' seed='12' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23grain)' opacity='.16'/%3E%3C/svg%3E"),
         linear-gradient(#101010, #080808);
+
     background-blend-mode: normal, soft-light, normal;
     background-attachment: fixed;
 }
@@ -55,9 +63,11 @@ body {
     transition: color .2s;
 }
 
-.dashboard-link:hover { color: #fff; }
+.dashboard-link:hover {
+    color: #fff;
+}
 
-/* Animation toggle */
+/* Hover animation button */
 .animate-all {
     margin-top: 18px;
     padding: 7px 16px;
@@ -135,6 +145,20 @@ body {
     -webkit-user-drag: none;
 }
 
+/* Animated medal overlay */
+.medal-animated {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.medal-animated.visible {
+    opacity: 1;
+}
+
+/* Medal titles */
 .award-title {
     margin-top: 5px;
     color: #777;
@@ -160,7 +184,9 @@ body {
     text-decoration: none;
 }
 
-.footer a:hover { color: #bbb; }
+.footer a:hover {
+    color: #bbb;
+}
 
 /* Responsive */
 @media (max-width: 950px) {
@@ -226,6 +252,7 @@ body {
 </footer>
 
 <script>
+/* All 10 Halloweek medals */
 const medals = [
     { title: "Executioner", url: "https://iili.io/nOETcuf.png" },
     { title: "Raging Bull", url: "https://iili.io/nOGLF4e.png" },
@@ -245,6 +272,9 @@ const animateButton = document.getElementById("animateAll");
 const items = [];
 let hoverEnabled = false;
 
+/*
+ * Generate a static PNG preview from the APNG.
+ */
 function makeStaticPreview(blob) {
     return new Promise((resolve, reject) => {
         const url = URL.createObjectURL(blob);
@@ -276,39 +306,53 @@ function makeStaticPreview(blob) {
     });
 }
 
+/*
+ * Stop animation by removing only the overlay.
+ * The static image underneath remains untouched.
+ */
 function stopAnimation(item) {
-    if (!item.staticFrame) return;
     item.playing = false;
-    item.image.src = item.staticFrame;
+
+    if (item.animatedImage) {
+        item.animatedImage.remove();
+        item.animatedImage = null;
+    }
 }
 
+/*
+ * Start an individual hover animation.
+ */
 function startAnimation(item) {
-    if (!hoverEnabled || item.playing || !item.animationURL) return;
+    if (!hoverEnabled || item.playing || !item.animationURL) {
+        return;
+    }
 
     item.playing = true;
 
-    const replacement = item.image.cloneNode(false);
-    replacement.removeAttribute("src");
-    replacement.style.visibility = "hidden";
+    const animated = document.createElement("img");
+    animated.className = "medal medal-animated";
+    animated.alt = "";
+    animated.draggable = false;
 
-    item.image.replaceWith(replacement);
-    item.image = replacement;
-    replacement.src = item.animationURL;
+    item.animatedImage = animated;
+    item.frame.appendChild(animated);
 
-    replacement.decode()
-        .then(() => {
-            if (item.image === replacement && item.playing) {
-                replacement.style.visibility = "visible";
-            }
-        })
-        .catch(() => {
-            if (item.image === replacement && item.playing) {
-                replacement.style.visibility = "visible";
-            }
-        });
+    animated.onload = () => {
+        if (
+            item.playing &&
+            item.animatedImage === animated
+        ) {
+            animated.classList.add("visible");
+        }
+    };
+
+    animated.src = item.animationURL;
 }
 
-medals.forEach((medal, index) => {
+/*
+ * Build gallery.
+ */
+medals.forEach((medal) => {
     const award = document.createElement("div");
     award.className = "award";
 
@@ -320,7 +364,10 @@ medals.forEach((medal, index) => {
     image.width = 305;
     image.height = 205;
     image.alt = "";
-    image.setAttribute("aria-label", "Halloweek Medal: " + medal.title);
+    image.setAttribute(
+        "aria-label",
+        "Halloweek Medal: " + medal.title
+    );
     image.draggable = false;
 
     const title = document.createElement("div");
@@ -338,31 +385,54 @@ medals.forEach((medal, index) => {
         frame,
         staticFrame: null,
         animationURL: null,
+        animatedImage: null,
         playing: false
     };
 
     items.push(item);
 
-    frame.addEventListener("mouseenter", () => startAnimation(item));
-    frame.addEventListener("mouseleave", () => stopAnimation(item));
+    frame.addEventListener("mouseenter", () => {
+        startAnimation(item);
+    });
+
+    frame.addEventListener("mouseleave", () => {
+        stopAnimation(item);
+    });
 });
 
+/*
+ * Download each APNG and prepare its static preview.
+ */
 async function prepareMedal(item) {
     const response = await fetch(item.url);
-    if (!response.ok) throw new Error("Failed to load " + item.url);
+
+    if (!response.ok) {
+        throw new Error("Failed to load " + item.url);
+    }
 
     const blob = await response.blob();
 
     item.staticFrame = await makeStaticPreview(blob);
     item.animationURL = URL.createObjectURL(blob);
+
     item.image.src = item.staticFrame;
 }
 
+/*
+ * Enable or disable hover animations.
+ */
 animateButton.addEventListener("click", () => {
     hoverEnabled = !hoverEnabled;
 
-    animateButton.classList.toggle("enabled", hoverEnabled);
-    animateButton.setAttribute("aria-pressed", String(hoverEnabled));
+    animateButton.classList.toggle(
+        "enabled",
+        hoverEnabled
+    );
+
+    animateButton.setAttribute(
+        "aria-pressed",
+        String(hoverEnabled)
+    );
 
     animateButton.textContent = hoverEnabled
         ? "DISABLE HOVER ANIMATIONS"
@@ -372,24 +442,38 @@ animateButton.addEventListener("click", () => {
         items.forEach(stopAnimation);
     } else {
         items.forEach(item => {
-            if (item.frame.matches(":hover")) startAnimation(item);
+            if (item.frame.matches(":hover")) {
+                startAnimation(item);
+            }
         });
     }
 });
 
+/*
+ * Initialize all medals.
+ */
 Promise.all(items.map(prepareMedal))
     .then(() => {
         animateButton.disabled = false;
-        animateButton.textContent = "ENABLE HOVER ANIMATIONS";
+        animateButton.textContent =
+            "ENABLE HOVER ANIMATIONS";
     })
     .catch(error => {
         console.error("Medal loading error:", error);
-        animateButton.textContent = "ANIMATIONS UNAVAILABLE";
+        animateButton.textContent =
+            "ANIMATIONS UNAVAILABLE";
     });
 
+/*
+ * Clean up animation resources.
+ */
 window.addEventListener("pagehide", () => {
     items.forEach(item => {
-        if (item.animationURL) URL.revokeObjectURL(item.animationURL);
+        stopAnimation(item);
+
+        if (item.animationURL) {
+            URL.revokeObjectURL(item.animationURL);
+        }
     });
 });
 </script>
