@@ -101,9 +101,9 @@ body {
 /* Gallery */
 .gallery {
     display: grid;
-    grid-template-columns: repeat(3, 265px);
-    column-gap: 12px;
-    row-gap: 18px;
+    grid-template-columns: repeat(3, 205px);
+    column-gap: 35px;
+    row-gap: 12px;
     width: max-content;
     max-width: 100%;
     margin: 0 auto;
@@ -111,17 +111,18 @@ body {
 }
 
 .award {
-    width: 265px;
+    width: 205px;
+    height: 305px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .medal {
     display: block;
-    width: 265px;
-    height: auto;
-    aspect-ratio: 305 / 205;
+    width: 205px;
+    height: 305px;
     object-fit: contain;
     border: none;
     border-radius: 0;
@@ -150,15 +151,15 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 825px) {
+@media (max-width: 710px) {
     .gallery {
-        grid-template-columns: repeat(2, 265px);
+        grid-template-columns: repeat(2, 205px);
     }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 460px) {
     .gallery {
-        grid-template-columns: 265px;
+        grid-template-columns: 205px;
     }
 }
 </style>
@@ -264,7 +265,7 @@ function makeStaticPreview(blob) {
 }
 
 /*
- * Stop animation and restore the static preview.
+ * Stop animation and restore static preview.
  */
 function stopAnimation(item) {
     if (!item.staticFrame) return;
@@ -275,6 +276,7 @@ function stopAnimation(item) {
 
 /*
  * Start an individual medal animation.
+ * The static preview remains visible until the APNG is ready.
  */
 function startAnimation(item) {
     if (!hoverEnabled || item.playing || !item.animationURL) {
@@ -283,14 +285,22 @@ function startAnimation(item) {
 
     item.playing = true;
 
-    // Replace the image element to restart APNG playback.
     const replacement = item.image.cloneNode(false);
     replacement.removeAttribute("src");
+    replacement.style.visibility = "hidden";
 
     item.image.replaceWith(replacement);
     item.image = replacement;
 
     replacement.src = item.animationURL;
+
+    replacement.decode()
+        .then(() => {
+            replacement.style.visibility = "visible";
+        })
+        .catch(() => {
+            replacement.style.visibility = "visible";
+        });
 }
 
 /*
@@ -302,8 +312,13 @@ medals.forEach((url, index) => {
 
     const image = document.createElement("img");
     image.className = "medal";
-    image.width = 265;
-    image.alt = "Halloweek Medal " + (index + 1);
+    image.width = 205;
+    image.height = 305;
+    image.alt = "";
+    image.setAttribute(
+        "aria-label",
+        "Halloweek Medal " + (index + 1)
+    );
     image.draggable = false;
 
     award.appendChild(image);
@@ -330,7 +345,7 @@ medals.forEach((url, index) => {
 });
 
 /*
- * Load each APNG and prepare its static preview.
+ * Download each APNG and prepare its static preview.
  */
 async function prepareMedal(item) {
     const response = await fetch(item.url);
